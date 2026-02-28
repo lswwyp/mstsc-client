@@ -17,6 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install build deps (make, etc.)
+        run: sudo apt-get update && sudo apt-get install -y make build-essential
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -53,12 +56,26 @@ jobs:
             echo "Build produced jniLibs"
             ls -la client/Android/Studio/freeRDPCore/src/main/jniLibs/
           else
-            echo "Build may have failed; check FreeRDP docs for dependencies (e.g. OpenSSL, make)"
+            echo "Build did not produce jniLibs; see logs above. You may need to build locally with WSL/Linux (see docs/RDP直连说明.md)."
+          fi
+
+      - name: Check jniLibs exists
+        id: jnilibs
+        run: |
+          if [ -d FreeRDP/client/Android/Studio/freeRDPCore/src/main/jniLibs ] && [ -n "$(ls -A FreeRDP/client/Android/Studio/freeRDPCore/src/main/jniLibs 2>/dev/null)" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload jniLibs
-        if: success()
+        if: steps.jnilibs.outputs.exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: jniLibs
           path: FreeRDP/client/Android/Studio/freeRDPCore/src/main/jniLibs/
+
+      - name: Note when no artifact
+        if: steps.jnilibs.outputs.exists != 'true'
+        run: |
+          echo "::notice::FreeRDP build did not produce jniLibs. No artifact uploaded. Build the libs locally with scripts/build-freerdp-android.sh in WSL/Linux (see docs/RDP直连说明.md)."

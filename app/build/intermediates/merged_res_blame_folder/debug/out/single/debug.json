@@ -4,10 +4,6 @@
         "source": "C:\\Users\\Administrator.DESKTOP-KU8DTJU\\.gradle\\daemon\\8.0\\com.mstsc.client.app-main-40:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.mstsc.client.app-merged_res-38:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "com.mstsc.client.app-main-40:/drawable/ic_launcher_foreground.xml"
-    },
-    {
         "merged": "C:\\Users\\Administrator.DESKTOP-KU8DTJU\\.gradle\\daemon\\8.0\\com.mstsc.client.app-merged_res-38:\\layout_dialog_device_form.xml.flat",
         "source": "C:\\Users\\Administrator.DESKTOP-KU8DTJU\\.gradle\\daemon\\8.0\\com.mstsc.client.app-main-40:\\layout\\dialog_device_form.xml"
     },
@@ -20,20 +16,8 @@
         "source": "C:\\Users\\Administrator.DESKTOP-KU8DTJU\\.gradle\\daemon\\8.0\\com.mstsc.client.app-main-40:\\layout\\item_device.xml"
     },
     {
-        "merged": "com.mstsc.client.app-merged_res-38:/layout_activity_main.xml.flat",
-        "source": "com.mstsc.client.app-main-40:/layout/activity_main.xml"
-    },
-    {
-        "merged": "com.mstsc.client.app-merged_res-38:/layout_dialog_device_form.xml.flat",
-        "source": "com.mstsc.client.app-main-40:/layout/dialog_device_form.xml"
-    },
-    {
         "merged": "C:\\Users\\Administrator.DESKTOP-KU8DTJU\\.gradle\\daemon\\8.0\\com.mstsc.client.app-merged_res-38:\\layout_activity_rdp_session.xml.flat",
         "source": "C:\\Users\\Administrator.DESKTOP-KU8DTJU\\.gradle\\daemon\\8.0\\com.mstsc.client.app-main-40:\\layout\\activity_rdp_session.xml"
-    },
-    {
-        "merged": "com.mstsc.client.app-merged_res-38:/layout_item_device.xml.flat",
-        "source": "com.mstsc.client.app-main-40:/layout/item_device.xml"
     },
     {
         "merged": "com.mstsc.client.app-merged_res-38:/layout_activity_rdp_session.xml.flat",

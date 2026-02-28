@@ -21,11 +21,14 @@
     <string name="device_list_title">设备列表</string>
     <string name="disconnect">断开</string>
     <string name="edit">编辑</string>
+    <string name="fullscreen">全屏</string>
     <string name="invalid_device_id">设备标识格式应为 IP或域名:端口</string>
     <string name="keyboard">键盘</string>
     <string name="no">取消</string>
     <string name="required_field">此项为必填</string>
     <string name="save">保存</string>
+    <string name="shrink">缩小</string>
+    <string name="win_key">Win</string>
     <string name="windows_account_hint">Windows 账号（支持域账号）</string>
     <string name="windows_password_hint">Windows 密码</string>
     <string name="yes">确定</string>

@@ -3169,7 +3169,6 @@ int id auto 0x7f080053
 int id autoComplete 0x7f080054
 int id autoCompleteToEnd 0x7f080055
 int id autoCompleteToStart 0x7f080056
-int id bar_bottom 0x7f080057
 int id barrier 0x7f080058
 int id baseline 0x7f080059
 int id beginOnFirstDraw 0x7f08005a
@@ -3184,9 +3183,8 @@ int id bounceStart 0x7f080062
 int id btn_cancel 0x7f080063
 int id btn_connect 0x7f080064
 int id btn_delete 0x7f080065
-int id btn_disconnect 0x7f080066
 int id btn_edit 0x7f080067
-int id btn_keyboard 0x7f080068
+int id btn_floating_disconnect 0x7f08020a
 int id btn_save 0x7f080069
 int id buttonPanel 0x7f08006a
 int id cache_measures 0x7f08006b
@@ -3566,7 +3564,6 @@ int id titleDividerNoCustom 0x7f0801e0
 int id title_template 0x7f0801e1
 int id toggle 0x7f0801e2
 int id toolbar 0x7f0801e3
-int id toolbar_session 0x7f0801e4
 int id top 0x7f0801e5
 int id topPanel 0x7f0801e6
 int id touch_outside 0x7f0801e7
@@ -3865,6 +3862,7 @@ int string error_icon_content_description 0x7f0e003c
 int string exposed_dropdown_menu_content_description 0x7f0e003d
 int string fab_transformation_scrim_behavior 0x7f0e003e
 int string fab_transformation_sheet_behavior 0x7f0e003f
+int string fullscreen 0x7f0e00bb
 int string hide_bottom_view_on_scroll_behavior 0x7f0e0040
 int string icon_content_description 0x7f0e0041
 int string invalid_device_id 0x7f0e0042
@@ -3982,9 +3980,11 @@ int string search_menu_title 0x7f0e00b1
 int string searchbar_scrolling_view_behavior 0x7f0e00b2
 int string searchview_clear_text_content_description 0x7f0e00b3
 int string searchview_navigation_content_description 0x7f0e00b4
+int string shrink 0x7f0e00bc
 int string side_sheet_accessibility_pane_title 0x7f0e00b5
 int string side_sheet_behavior 0x7f0e00b6
 int string status_bar_notification_info_overflow 0x7f0e00b7
+int string win_key 0x7f0e00bd
 int string windows_account_hint 0x7f0e00b8
 int string windows_password_hint 0x7f0e00b9
 int string yes 0x7f0e00ba

@@ -4,15 +4,13 @@ package com.mstsc.client.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.mstsc.client.R;
 import com.mstsc.client.ui.rdp.RdpSurfaceView;
@@ -22,16 +20,10 @@ import java.lang.String;
 
 public final class ActivityRdpSessionBinding implements ViewBinding {
   @NonNull
-  private final ConstraintLayout rootView;
+  private final FrameLayout rootView;
 
   @NonNull
-  public final LinearLayout barBottom;
-
-  @NonNull
-  public final MaterialButton btnDisconnect;
-
-  @NonNull
-  public final MaterialButton btnKeyboard;
+  public final MaterialButton btnFloatingDisconnect;
 
   @NonNull
   public final ProgressBar progressBar;
@@ -42,27 +34,19 @@ public final class ActivityRdpSessionBinding implements ViewBinding {
   @NonNull
   public final TextView statusText;
 
-  @NonNull
-  public final MaterialToolbar toolbarSession;
-
-  private ActivityRdpSessionBinding(@NonNull ConstraintLayout rootView,
-      @NonNull LinearLayout barBottom, @NonNull MaterialButton btnDisconnect,
-      @NonNull MaterialButton btnKeyboard, @NonNull ProgressBar progressBar,
-      @NonNull RdpSurfaceView rdpSurface, @NonNull TextView statusText,
-      @NonNull MaterialToolbar toolbarSession) {
+  private ActivityRdpSessionBinding(@NonNull FrameLayout rootView,
+      @NonNull MaterialButton btnFloatingDisconnect, @NonNull ProgressBar progressBar,
+      @NonNull RdpSurfaceView rdpSurface, @NonNull TextView statusText) {
     this.rootView = rootView;
-    this.barBottom = barBottom;
-    this.btnDisconnect = btnDisconnect;
-    this.btnKeyboard = btnKeyboard;
+    this.btnFloatingDisconnect = btnFloatingDisconnect;
     this.progressBar = progressBar;
     this.rdpSurface = rdpSurface;
     this.statusText = statusText;
-    this.toolbarSession = toolbarSession;
   }
 
   @Override
   @NonNull
-  public ConstraintLayout getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -87,21 +71,9 @@ public final class ActivityRdpSessionBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.bar_bottom;
-      LinearLayout barBottom = ViewBindings.findChildViewById(rootView, id);
-      if (barBottom == null) {
-        break missingId;
-      }
-
-      id = R.id.btn_disconnect;
-      MaterialButton btnDisconnect = ViewBindings.findChildViewById(rootView, id);
-      if (btnDisconnect == null) {
-        break missingId;
-      }
-
-      id = R.id.btn_keyboard;
-      MaterialButton btnKeyboard = ViewBindings.findChildViewById(rootView, id);
-      if (btnKeyboard == null) {
+      id = R.id.btn_floating_disconnect;
+      MaterialButton btnFloatingDisconnect = ViewBindings.findChildViewById(rootView, id);
+      if (btnFloatingDisconnect == null) {
         break missingId;
       }
 
@@ -123,14 +95,8 @@ public final class ActivityRdpSessionBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.toolbar_session;
-      MaterialToolbar toolbarSession = ViewBindings.findChildViewById(rootView, id);
-      if (toolbarSession == null) {
-        break missingId;
-      }
-
-      return new ActivityRdpSessionBinding((ConstraintLayout) rootView, barBottom, btnDisconnect,
-          btnKeyboard, progressBar, rdpSurface, statusText, toolbarSession);
+      return new ActivityRdpSessionBinding((FrameLayout) rootView, btnFloatingDisconnect,
+          progressBar, rdpSurface, statusText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

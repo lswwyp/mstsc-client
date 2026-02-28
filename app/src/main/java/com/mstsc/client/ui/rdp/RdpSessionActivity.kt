@@ -2,8 +2,9 @@ package com.mstsc.client.ui.rdp
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ class RdpSessionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRdpSessionBinding
     private var connectionState: ConnectionState = ConnectionState.Idle
+    private var reconnectOnResume = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +39,8 @@ class RdpSessionActivity : AppCompatActivity() {
             return
         }
 
-        binding.toolbarSession.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-        binding.btnDisconnect.setOnClickListener { disconnectAndFinish() }
-        binding.btnKeyboard.setOnClickListener { toggleKeyboard() }
+        binding.btnFloatingDisconnect.setOnClickListener { disconnectAndFinish() }
+        setupDraggableDisconnectButton()
 
         binding.rdpSurface.host = parseHost(deviceId)
         binding.rdpSurface.port = parsePort(deviceId)
@@ -51,6 +52,11 @@ class RdpSessionActivity : AppCompatActivity() {
             runOnUiThread {
                 connectionState = state
                 updateConnectionUi(state, message)
+            }
+        }
+        binding.rdpSurface.onDiagnostics = { msg ->
+            runOnUiThread {
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -70,6 +76,7 @@ class RdpSessionActivity : AppCompatActivity() {
             ConnectionState.Connected -> {
                 binding.statusText.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
+                binding.rdpSurface.requestFocus()
             }
             ConnectionState.Failed -> {
                 binding.statusText.text = getString(R.string.connect_failed) + (message?.let { ": $it" } ?: "")
@@ -95,26 +102,83 @@ class RdpSessionActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun toggleKeyboard() {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        if (binding.rdpSurface.hasFocus()) {
-            imm?.showSoftInput(binding.rdpSurface, InputMethodManager.SHOW_IMPLICIT)
-        } else {
+    override fun onDestroy() {
+        // Activity 真正销毁时释放连接；切后台仅 surface 销毁时不会断开，避免返回黑屏
+        if (isFinishing) binding.rdpSurface.disconnect()
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (connectionState == ConnectionState.Connected) {
             binding.rdpSurface.requestFocus()
-            imm?.showSoftInput(binding.rdpSurface, InputMethodManager.SHOW_IMPLICIT)
+            if (reconnectOnResume) {
+                reconnectOnResume = false
+                lifecycleScope.launch {
+                    setState(ConnectionState.Connecting, "前台恢复，正在重连…")
+                    binding.rdpSurface.reconnect()
+                }
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        reconnectOnResume = connectionState == ConnectionState.Connected
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // 连接后将键盘事件统一映射到远端（包括 Ctrl/Win 等）
+        if (connectionState == ConnectionState.Connected) {
+            binding.rdpSurface.requestFocus()
+            binding.rdpSurface.handleKeyboardEvent(event)
+            // 无论发送是否成功都拦截，避免 Ctrl+Tab/Win 等本地系统快捷键抢占
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    private fun setupDraggableDisconnectButton() {
+        var downRawX = 0f
+        var downRawY = 0f
+        var dX = 0f
+        var dY = 0f
+        var moved = false
+        val btn = binding.btnFloatingDisconnect
+        btn.setOnTouchListener { v, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downRawX = event.rawX
+                    downRawY = event.rawY
+                    dX = v.x - downRawX
+                    dY = v.y - downRawY
+                    moved = false
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val parent = v.parent as View
+                    val newX = (event.rawX + dX).coerceIn(0f, (parent.width - v.width).toFloat().coerceAtLeast(0f))
+                    val newY = (event.rawY + dY).coerceIn(0f, (parent.height - v.height).toFloat().coerceAtLeast(0f))
+                    if (kotlin.math.abs(event.rawX - downRawX) > 6f || kotlin.math.abs(event.rawY - downRawY) > 6f) {
+                        moved = true
+                    }
+                    v.x = newX
+                    v.y = newY
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    if (!moved) v.performClick()
+                    true
+                }
+                else -> false
+            }
         }
     }
 
     override fun onBackPressed() {
-        if (connectionState == ConnectionState.Connected) {
-            AlertDialog.Builder(this)
-                .setMessage("确定断开连接？")
-                .setPositiveButton(R.string.yes) { _, _ -> disconnectAndFinish() }
-                .setNegativeButton(R.string.no, null)
-                .show()
-        } else {
-            super.onBackPressed()
-        }
+        // 全屏会话中返回键也映射远端，退出请用悬浮断开按钮
+        if (connectionState == ConnectionState.Connected) return
+        super.onBackPressed()
     }
 
     private fun parseHost(deviceId: String): String {

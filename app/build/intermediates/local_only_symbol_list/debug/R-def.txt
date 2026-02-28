@@ -9,13 +9,11 @@ dimen card_padding
 dimen fab_margin
 dimen list_padding
 drawable ic_launcher_foreground
-id bar_bottom
 id btn_cancel
 id btn_connect
 id btn_delete
-id btn_disconnect
 id btn_edit
-id btn_keyboard
+id btn_floating_disconnect
 id btn_save
 id et_device_id
 id et_password
@@ -29,7 +27,6 @@ id til_device_id
 id til_password
 id til_username
 id toolbar
-id toolbar_session
 id tv_device_id
 id tv_username
 layout activity_main
@@ -49,11 +46,14 @@ string device_id_hint
 string device_list_title
 string disconnect
 string edit
+string fullscreen
 string invalid_device_id
 string keyboard
 string no
 string required_field
 string save
+string shrink
+string win_key
 string windows_account_hint
 string windows_password_hint
 string yes

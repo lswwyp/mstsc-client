@@ -3170,7 +3170,6 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
-id bar_bottom
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -3185,9 +3184,8 @@ id bounceStart
 id btn_cancel
 id btn_connect
 id btn_delete
-id btn_disconnect
 id btn_edit
-id btn_keyboard
+id btn_floating_disconnect
 id btn_save
 id buttonPanel
 id cache_measures
@@ -3567,7 +3565,6 @@ id titleDividerNoCustom
 id title_template
 id toggle
 id toolbar
-id toolbar_session
 id top
 id topPanel
 id touch_outside
@@ -3866,6 +3863,7 @@ string error_icon_content_description
 string exposed_dropdown_menu_content_description
 string fab_transformation_scrim_behavior
 string fab_transformation_sheet_behavior
+string fullscreen
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
 string invalid_device_id
@@ -3983,9 +3981,11 @@ string search_menu_title
 string searchbar_scrolling_view_behavior
 string searchview_clear_text_content_description
 string searchview_navigation_content_description
+string shrink
 string side_sheet_accessibility_pane_title
 string side_sheet_behavior
 string status_bar_notification_info_overflow
+string win_key
 string windows_account_hint
 string windows_password_hint
 string yes

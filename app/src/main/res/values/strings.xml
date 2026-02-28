@@ -16,6 +16,9 @@
     <string name="connect_failed">连接失败</string>
     <string name="disconnect">断开</string>
     <string name="keyboard">键盘</string>
+    <string name="win_key">Win</string>
+    <string name="shrink">缩小</string>
+    <string name="fullscreen">全屏</string>
     <string name="required_field">此项为必填</string>
     <string name="invalid_device_id">设备标识格式应为 IP或域名:端口</string>
     <string name="confirm_delete">确定删除该设备？</string>

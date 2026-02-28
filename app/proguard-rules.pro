@@ -1,0 +1,2 @@
+-keep class com.mstsc.client.data.** { *; }
+-dontwarn javax.annotation.**

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 平板适配：sw600dp 为 7 寸及以上平板，增大内边距与触控区域 -->
+<resources>
+    <dimen name="list_padding">24dp</dimen>
+    <dimen name="card_margin">12dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+</resources>

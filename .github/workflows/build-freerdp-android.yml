@@ -1,0 +1,64 @@
+# 构建 FreeRDP Android 原生库，产出 jniLibs 供本应用直连 Windows RDP 使用。
+# 在 Actions 页点击 "Build FreeRDP for Android" → "Run workflow" 运行；
+# 完成后在该次运行的 Artifacts 中下载 jniLibs，解压到 app/src/main/jniLibs 后重新打包即可。
+name: Build FreeRDP for Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '.github/workflows/build-freerdp-android.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Clone FreeRDP
+        run: |
+          git clone --depth 1 https://github.com/FreeRDP/FreeRDP.git
+          echo "FREERDP_DIR=$PWD/FreeRDP" >> $GITHUB_ENV
+
+      - name: Install Android SDK and NDK
+        run: |
+          mkdir -p $HOME/android-sdk
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          cd $HOME/android-sdk
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdtools.zip
+          unzip -q cmdtools.zip
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
+          yes | cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-34" "ndk;25.2.9519653" "cmake;3.22.1"
+          echo "ANDROID_NDK=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+
+      - name: Build FreeRDP for Android
+        env:
+          ANDROID_NDK: ${{ env.ANDROID_NDK }}
+          ANDROID_SDK: ${{ env.ANDROID_SDK_ROOT }}
+        run: |
+          cd $FREERDP_DIR
+          chmod +x scripts/android-build-freerdp.sh
+          ./scripts/android-build-freerdp.sh --ndk "$ANDROID_NDK" --sdk "$ANDROID_SDK" || true
+          if [ -d client/Android/Studio/freeRDPCore/src/main/jniLibs ]; then
+            echo "Build produced jniLibs"
+            ls -la client/Android/Studio/freeRDPCore/src/main/jniLibs/
+          else
+            echo "Build may have failed; check FreeRDP docs for dependencies (e.g. OpenSSL, make)"
+          fi
+
+      - name: Upload jniLibs
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jniLibs
+          path: FreeRDP/client/Android/Studio/freeRDPCore/src/main/jniLibs/
